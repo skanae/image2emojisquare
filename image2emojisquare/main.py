@@ -7,15 +7,15 @@ TATE = 0
 YOKO = 0 
 
 color2 = {
-    '\U0001F7E5':[248, 49, 47],
-    '\U0001F7E6':[0, 166, 237],
-    '\U0001F7E7':[255, 103, 35],
-    '\U0001F7E8':[255, 176, 46],
-    '\U0001F7E9':[0, 210, 106],
-    '\U0001F7EA':[199, 144, 241],
-    '\U0001F7EB':[165, 105, 83],
-    '\U00002B1B':[0, 0, 0],
-    '\U00002B1C':[255, 255, 255],
+    '\U0001F7E5':[248, 49, 47], #red
+    '\U0001F7E6':[0, 166, 237], #blue
+    '\U0001F7E7':[255, 103, 35],#orange
+    '\U0001F7E8':[255, 176, 46],#yelllow
+    '\U0001F7E9':[0, 210, 106], #green
+    '\U0001F7EA':[199, 144, 241],#purple
+    '\U0001F7EB':[165, 105, 83],#brown
+    '\U00002B1B':[0, 0, 0],#black
+    '\U00002B1C':[255, 255, 255],#white
 }
 
 color3 = {
@@ -29,6 +29,7 @@ color3 = {
     (0, 0, 0   ):'\U00002B1B',
     (255,255,255):'\U00002B1C',
 }
+
 
 # 新しい辞書を作成し、各値をndarrayに変換
 color2_as_numpy = {k: np.array(v) for k, v in color2.items()}
@@ -93,6 +94,25 @@ def find_closest_emoji(average_color, emoji_list):
 
     return closest_emoji
 
+def make_emoji_list(grid_images):
+    result = []
+    for grid in grid_images:
+        average_color = get_average_color(grid)
+        closest_emoji = find_closest_emoji(average_color, color2_as_numpy)
+        result.append(closest_emoji)
+
+    result_emoji = []
+    for a in result:
+        result_emoji.append(color3[tuple(a)])
+    return result_emoji
+
+def output_emoji(args, result_emoji_list):
+    output_path = output_path = r'C:\Users\kanae\Desktop\hobbyprogram\image2emojisquare'+"\\" + args[1] + '.txt'
+    with open(output_path, 'w', encoding='utf-8') as file:
+        sys.stdout = file
+        print_emoji(result_emoji_list)
+    sys.stdout = sys.__stdout__
+
 def print_emoji(result_emoji):
     
     for i in range(TATE*YOKO):
@@ -103,34 +123,25 @@ def print_emoji(result_emoji):
 #==================================
 
 def main ():
+    
     args = args = sys.argv
+    grid_size = 100  
+
     # 画像を読み込む
     image = cv2.imread(args[1], cv2.IMREAD_UNCHANGED)
 
-    grid_size = 100  
+    #画像をgridに切り分ける
     grid_images = split_image_into_grid(image, grid_size)
 
     # 各格子に対して最も近い絵文字を選択
-    result = []
+    result_emoji_list = make_emoji_list(grid_images)
 
-    for grid in grid_images:
-        average_color = get_average_color(grid)
-        closest_emoji = find_closest_emoji(average_color, color2_as_numpy)
-        result.append(closest_emoji)
+    #結果の絵文字のtxtを出力
+    output_emoji(args, result_emoji_list)
 
-    result_emoji = []
 
-    # print(result)
-
-    for a in result:
-        result_emoji.append(color3[tuple(a)])
-    output_path = output_path = r'C:\Users\kanae\Desktop\hobbyprogram\image2emojisquare'+"\\" + args[1] + '.txt'
-
-    with open(output_path, 'w', encoding='utf-8') as file:
-        sys.stdout = file
-        print_emoji(result_emoji)
-    sys.stdout = sys.__stdout__
 
 if __name__ == "__main__":
     args = args = sys.argv
     main()
+    print(color2)
