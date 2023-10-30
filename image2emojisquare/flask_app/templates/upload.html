@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>画像アップロード</title>
+</head>
+
+<body>
+    <h1>画像をアップロード</h1>
+    <form action="/process_image" method="post" enctype="multipart/form-data">
+        <input type="file" name="image" accept="image/*" required>
+        <br>
+        <input type="submit" value="アップロード">
+    </form>
+</body>
+
+</html>
