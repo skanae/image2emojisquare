@@ -30,9 +30,33 @@ color3 = {
     (255,255,255):'\U00002B1C',
 }
 
+color4: dict[str, list[int]] = {
+    '\U0001F7E5':[47, 49, 248], #red
+    '\U0001F7E6':[237, 166, 0], #blue
+    '\U0001F7E7':[35, 103,255 ],#orange
+    '\U0001F7E8':[46, 176, 255],#yelllow
+    '\U0001F7E9':[106, 210, 0], #green
+    '\U0001F7EA':[241, 144, 199],#purple
+    '\U0001F7EB':[83, 105, 165],#brown
+    '\U00002B1B':[0, 0, 0],#black
+    '\U00002B1C':[255, 255, 255],#white
+}
+
+color5 = {
+    (47, 49, 248):'\U0001F7E5',
+    ( 237, 166,0):'\U0001F7E6',
+    (35, 103,255):'\U0001F7E7',
+    (46, 176,255):'\U0001F7E8',
+    (106, 210, 0):'\U0001F7E9',
+    (241,144,199):'\U0001F7EA',
+    (83, 105,165):'\U0001F7EB',
+    (0, 0, 0   ):'\U00002B1B',
+    (255,255,255):'\U00002B1C',
+}
+
 
 # 新しい辞書を作成し、各値をndarrayに変換
-color2_as_numpy = {k: np.array(v) for k, v in color2.items()}
+color2_as_numpy = {k: np.array(v) for k, v in color4.items()}
 
 def split_image_into_grid(image, n):
     height, width, _ = image.shape
@@ -103,7 +127,7 @@ def make_emoji_list(grid_images):
 
     result_emoji = []
     for a in result:
-        result_emoji.append(color3[tuple(a)])
+        result_emoji.append(color5[tuple(a)])
     return result_emoji
 
 def output_emoji(args, result_emoji_list):
